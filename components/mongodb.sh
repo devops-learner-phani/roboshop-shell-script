@@ -6,7 +6,7 @@ systemctl enable mongod
 systemctl start mongod
 systemctl status mongod
 vim /etc/mongod.conf
-systemctl restart mogod
+systemctl restart mongod 
 curl -s -L -o /tmp/mongodb.zip "https://github.com/roboshop-devops-project/mongodb/archive/main.zip"
 cd /tmp
 unzip -o mongodb.zip
