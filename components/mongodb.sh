@@ -1,5 +1,3 @@
-#!/bin/bash
-
 curl -s -o /ect/yum.repos.d/mongodb.repo https://raw.githubusercontent.com/roboshop-devops-project/mongodb/main/mongo.repo
 yum install mongodb-org -y
 systemctl enable mongod
