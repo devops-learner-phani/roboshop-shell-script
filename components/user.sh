@@ -1,1 +1,0 @@
-echo Install User Component
