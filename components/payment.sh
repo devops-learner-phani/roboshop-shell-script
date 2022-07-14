@@ -1,1 +1,1 @@
-echo Install Payment Component
+echo Install  Component
