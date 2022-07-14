@@ -11,4 +11,4 @@
 #cd /tmp
 #unzip mysql.zip
 #cd mysql-main
-#ysql -u root -pRoboShop@1 <shipping.sql
+#mysql -u root -pRoboShop@1 <shipping.sql
