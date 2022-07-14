@@ -6,6 +6,9 @@ cd /usr/share/nginx/html
 rm -rf *
 unzip /tmp/frontend.zip
 mv frontend-main/localhost.conf /etc/nginx/default.d/roboshop.conf
+sed -i -e '/catalogue/ s/localhost/catalogue1.roboshop.internal/' /etc/nginx/default.d/roboshop.conf
+systemctl restart nginx
+
 
 
 
