@@ -19,5 +19,5 @@ rabbitmq:
 shipping:
 	@bash components/shipping.sh
 dispatch:
-	@bash components/dispatch.sh
+	bash components/dispatch.sh
 										
