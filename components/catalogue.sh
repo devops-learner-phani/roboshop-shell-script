@@ -12,6 +12,6 @@ sed -i -e 's/MONGO_DNSNAME/mongodb1.roboshop.internal/' /home/roboshop/catalogue
 mv /home/roboshop/catalogue/systemd.service /etc/systemd/system/catalogue.service
 systemctl daemon-reload
 systemctl enable catalogue
-systemctl start catalogue
+systemctl restart catalogue
 
 

@@ -2,5 +2,5 @@ curl -L -o /etc/yum.repos.d/redis.repo https://raw.githubusercontent.com/robosho
 yum install redis-6.2.7 -y
 sed -i -e 's/127.0.0.1/0.0.0.0/' /etc/redis.conf /etc/redis/redis.conf
 systemctl enable redis
-systemctl start redis
+systemctl restart redis
 
