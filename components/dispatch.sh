@@ -14,3 +14,5 @@ mv /home/roboshop/dispatch/systemd.service /etc/systemd/system/dispatch.service
 systemctl daemon-reload
 systemctl enable dispatch
 systemctl restart dispatch
+
+
