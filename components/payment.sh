@@ -10,10 +10,9 @@ pip3 install -r requirements.txt
 USER_ID=$(id -u roboshop)
 GROUP_ID=$(id -g roboshop)
 sed -i -e "/^uid/ c uid = ${USER_ID}" -e "/^gid/ c gid = ${GROUP_ID}" /home/roboshop/payment/payment.ini
-
-#sed -i -e 's/CARTHOST/cart-1.roboshop.internal/' -e 's/USERHOST/user-1.roboshop.internal/' -e 's/AMQPHOST/rabbitmq-1.roboshop.internal/' /home/roboshop/payment/systemd.service
-#mv /home/roboshop/payment/systemd.service /etc/systemd/system/payment.service
-#systemctl daemon-reload
-#systemctl enable payment
-#systemctl start payment
+sed -i -e 's/CARTHOST/cart-1.roboshop.internal/' -e 's/USERHOST/user-1.roboshop.internal/' -e 's/AMQPHOST/rabbitmq-1.roboshop.internal/' /home/roboshop/payment/systemd.service
+mv /home/roboshop/payment/systemd.service /etc/systemd/system/payment.service
+systemctl daemon-reload
+systemctl enable payment
+systemctl start payment
 
