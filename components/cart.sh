@@ -2,6 +2,11 @@ source components/common.sh
 
 CHECK_ROOT
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+if [ $? -ne 0 ]; then
+  echo "Installing nodejs is a failure"
+  exit 2
+fi
+
 yum install nodejs -y
 useradd roboshop
 curl -s -L -o /tmp/cart.zip https://github.com/roboshop-devops-project/cart/archive/main.zip
