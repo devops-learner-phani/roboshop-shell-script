@@ -1,7 +1,7 @@
 source components/common.sh
 
 CHECK_ROOT
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG}
 if [ $? -ne 0 ]; then
   echo "Installing nodejs is a failure"
   exit 2
