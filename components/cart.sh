@@ -1,10 +1,14 @@
 source components/common.sh
 
 CHECK_ROOT
+
+echo "Installing nodejs is a "
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG}
 if [ $? -ne 0 ]; then
-  echo "Installing nodejs is a failure"
+  echo Failure
   exit 2
+else
+  echo Success
 fi
 
 yum install nodejs -y
