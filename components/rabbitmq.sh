@@ -1,9 +1,6 @@
-USER_ID=$(id -u)
-if [ $USER_ID -ne 0 ]; then
-    echo you are Non root user
-    echo You can run this script as a root user or with sudo
-    exit 1
-fi
+source components/common.sh
+
+CHECK_ROOT
 
 yum install https://github.com/rabbitmq/erlang-rpm/releases/download/v23.2.6/erlang-23.2.6-1.el7.x86_64.rpm -y
 curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | sudo bash
