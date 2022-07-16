@@ -6,5 +6,14 @@ CHECK_ROOT() {
   fi
 }
 
+CHECK_STAT() {
+if [ $1 -ne 0 ]; then
+  echo -e "\e[31mFailure\e[0m"
+  exit 2
+else
+  echo -e "\e[32mSuccess\e[0m"
+fi
+}
+
 LOG=/tmp/roboshop.log
 rm -r $LOG
