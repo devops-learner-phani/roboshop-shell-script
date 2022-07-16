@@ -3,6 +3,11 @@ source components/common.sh
 CHECK_ROOT
 
 yum install golang -y
+if [ $? -ne 0 ]; then
+  echo "Installing golang is a failure"
+  exit 2
+fi
+
 useradd roboshop
 curl -s -L -o /tmp/dispatch.zip https://github.com/roboshop-devops-project/dispatch/archive/main.zip
 cd /home/roboshop
