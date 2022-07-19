@@ -11,7 +11,7 @@ yum install mysql-community-server -y &>>${LOG}
 CHECK_STAT $?
 
 PRINT "Start mysql service"
-systemctl start mysqld &>>${LOG} && systemctl enable mysqld &>>${LOG}
+systemctl start mysqld &>>${LOG} && systemctl enable mysqld
 CHECK_STAT $?
 
 
