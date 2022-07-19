@@ -120,4 +120,52 @@ NGINX() {
   systemctl enable nginx &>>${LOG} && systemctl restart nginx &>>${LOG}
   CHECK_STAT $?
 
-}          
+}
+
+MAVEN() {
+
+  CHECK_ROOT
+  
+  PRINT "Install maven "
+  yum install maven -y &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Adding application user"
+  useradd roboshop &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Downloading shipping content"
+  curl -s -L -o /tmp/${COMPONENT}.zip https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Removing old content"
+  cd /home/roboshop && rm -rf ${COMPONENT} &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Extract ${COMPONENT} content"
+  unzip /tmp/${COMPONENT}.zip &>>${LOG}
+  CHECK_STAT $?
+
+
+  PRINT "Organise ${COMPONENT} content"
+  mv ${COMPONENT}-main ${COMPONENT} &>>${LOG} && cd ${COMPONENT} &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Downloading ${COMPONENT}  dependencies"
+  mvn clean package &>>${LOG} && mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar &>>${LOG}
+  CHECK_STAT $?
+
+
+  PRINT "Update system congifuration"
+  sed -i -e 's/CARTENDPOINT/cart.roboshop.internal/' -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Setup system configuration"
+  mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>>${LOG} && systemctl daemon-reload &>>${LOG}
+  CHECK_STAT $?
+
+
+  PRINT "restart ${COMPONENT} service"
+  systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
+  CHECK_STAT $?
+}
