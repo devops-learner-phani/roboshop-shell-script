@@ -171,4 +171,3 @@ MAVEN() {
   systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
   CHECK_STAT $?
 }
-}
