@@ -36,7 +36,7 @@ APP_COMMON_SETUP() {
     CHECK_STAT $?
 
     PRINT "Downloading ${COMPONENT} content"
-    curl -s -L -o /tmp/${COMPONENT}.zip https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip &>>${LOG} && cd /home/roboshop &>>${LOG}
+    curl -s -L -o /tmp/${COMPONENT}.zip https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip &>>${LOG} && cd /home/roboshop
     CHECK_STAT $?
 
     PRINT "Remove old content"
@@ -142,7 +142,7 @@ MAVEN() {
   APP_COMMON_SETUP
 
   PRINT "Compile ${COMPONENT} code"
-  mv ${COMPONENT}-main ${COMPONENT}  && cd ${COMPONENT} &>>${LOG} &&  mvn clean package &>>${LOG}  && mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar &>>${LOG}
+  mvn clean package &>>${LOG}  && mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar &>>${LOG}
   CHECK_STAT $?
 
   SYSTEMD
