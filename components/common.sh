@@ -45,7 +45,7 @@ APP_COMMON_SETUP() {
     PRINT "Creating application user"
      id roboshop &>>${LOG}
      if [ $? -ne 0 ]; then
-      useradd roboshop &>>${LOG}
+       useradd roboshop &>>${LOG}
      fi
     CHECK_STAT $?
 
