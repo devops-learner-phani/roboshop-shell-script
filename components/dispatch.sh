@@ -13,7 +13,7 @@ cd dispatch
 go mod init dispatch
 go get
 go build
-sed -i -e 's/RABBITMQ-IP/rabbitmq-1.roboshop.internal/' /home/roboshop/dispatch/systemd.service
+sed -i -e 's/RABBITMQ-IP/rabbitmq.roboshop.internal/' /home/roboshop/dispatch/systemd.service
 mv /home/roboshop/dispatch/systemd.service /etc/systemd/system/dispatch.service
 systemctl daemon-reload
 systemctl enable dispatch
