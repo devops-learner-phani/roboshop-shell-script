@@ -25,6 +25,21 @@ PRINT() {
   echo "$1"
 }
 
+SYSTEMD() {
+  PRINT "Update system congifuration"
+    sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' -e 's/CARTENDPOINT/cart.roboshop.internal/' -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG}
+    CHECK_STAT $?
+
+    PRINT "Setup system configuration"
+    mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>>${LOG} && systemctl daemon-reload &>>${LOG}
+    CHECK_STAT $?
+
+
+    PRINT "restart ${COMPONENT} service"
+    systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
+    CHECK_STAT $?
+}
+
 NODEJS() {
 
   CHECK_ROOT
@@ -62,20 +77,7 @@ NODEJS() {
   npm install &>>${LOG}
   CHECK_STAT $?
 
-  PRINT "Update systemd file configuration"
-  sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/'  /home/roboshop/${COMPONENT}/systemd.service
-  CHECK_STAT $?
-
-  PRINT "Setup systemd configuration"
-  mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>>${LOG} && systemctl daemon-reload && systemctl start ${COMPONENT} &>>${LOG}
-  CHECK_STAT $?
-
-
-
-
-  PRINT "Start ${COMPONENT} service"
-  systemctl enable ${COMPONENT} &>>${LOG}
-  CHECK_STAT $?
+  SYSTEMD
 }
 
 
@@ -157,17 +159,6 @@ MAVEN() {
   mvn clean package &>>${LOG} && mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar &>>${LOG}
   CHECK_STAT $?
 
+  SYSTEMD
 
-  PRINT "Update system congifuration"
-  sed -i -e 's/CARTENDPOINT/cart.roboshop.internal/' -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG}
-  CHECK_STAT $?
-
-  PRINT "Setup system configuration"
-  mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>>${LOG} && systemctl daemon-reload &>>${LOG}
-  CHECK_STAT $?
-
-
-  PRINT "restart ${COMPONENT} service"
-  systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
-  CHECK_STAT $?
 }
