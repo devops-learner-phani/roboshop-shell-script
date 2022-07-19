@@ -40,6 +40,29 @@ SYSTEMD() {
     CHECK_STAT $?
 }
 
+APP_COMMON_SETUP() {
+
+   PRINT "Creating application user"
+    id roboshop &>>${LOG}
+    if [ $? -ne 0 ]; then
+      useradd roboshop &>>${LOG}
+    fi
+    CHECK_STAT $?
+
+    PRINT "Downloading ${COMPONENT} content"
+    curl -s -L -o /tmp/${COMPONENT}.zip https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip &>>${LOG} && cd /home/roboshop &>>${LOG}
+    CHECK_STAT $?
+
+    PRINT "Remove old content"
+    rm -rf ${COMPONENT} &>>${LOG}
+    CHECK_STAT $?
+
+    PRINT "Extract ${COMPONENT} content"
+    unzip /tmp/${COMPONENT}.zip &>>${LOG}  && mv ${COMPONENT}-main ${COMPONENT} && cd ${COMPONENT}
+    CHECK_STAT $?
+
+}
+
 NODEJS() {
 
   CHECK_ROOT
@@ -52,26 +75,7 @@ NODEJS() {
   yum install nodejs -y &>>${LOG}
   CHECK_STAT $?
 
-  PRINT "Creating application user"
-  id roboshop &>>${LOG}
-  if [ $? -ne 0 ]; then
-    useradd roboshop &>>${LOG}
-  fi
-  CHECK_STAT $?
-
-  PRINT "Downloading ${COMPONENT} content"
-  curl -s -L -o /tmp/${COMPONENT}.zip https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip &>>${LOG} && cd /home/roboshop &>>${LOG}
-  CHECK_STAT $?
-
-
-
-  PRINT "Remove old content"
-  rm -rf ${COMPONENT} &>>${LOG}
-  CHECK_STAT $?
-
-  PRINT "Extract ${COMPONENT} content"
-  unzip /tmp/${COMPONENT}.zip &>>${LOG}  && mv ${COMPONENT}-main ${COMPONENT} && cd ${COMPONENT}
-  CHECK_STAT $?
+  APP_COMMON_SETUP
 
   PRINT "Install nodejs dependencies"
   npm install &>>${LOG}
@@ -131,24 +135,7 @@ MAVEN() {
   yum install maven -y &>>${LOG}
   CHECK_STAT $?
 
-  PRINT "Adding application user"
-  id roboshop &>>${LOG}
-  if [ $? -ne 0 ]; then
-    useradd roboshop &>>${LOG}
-  fi
-  CHECK_STAT $?
-
-  PRINT "Downloading shipping content"
-  curl -s -L -o /tmp/${COMPONENT}.zip https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip &>>${LOG}
-  CHECK_STAT $?
-
-  PRINT "Removing old content"
-  cd /home/roboshop && rm -rf ${COMPONENT} &>>${LOG}
-  CHECK_STAT $?
-
-  PRINT "Extract ${COMPONENT} content"
-  unzip /tmp/${COMPONENT}.zip &>>${LOG}
-  CHECK_STAT $?
+  APP_COMMON_SETUP
 
 
   PRINT "Organise ${COMPONENT} content"
