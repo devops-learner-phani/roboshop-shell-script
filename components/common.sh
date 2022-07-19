@@ -150,23 +150,24 @@ MAVEN() {
 }
 
 PYTHON() {
+
   CHECK_ROOT
 
-  PRINT "Install Python"
-  yum install python36 gcc python3-devel -y
+  PRINT "Install Python-3"
+  yum install python36 gcc python3-devel -y &>>${LOG}
   CHECK_STAT $?
 
   APP_COMMON_SETUP
 
   PRINT "Download Python dependencies"
-  pip3 install -r requirements.txt
+  pip3 install -r requirements.txt &>>${LOG}
   CHECK_STAT $?
 
   USER_ID=$(id -u roboshop)
   GROUP_ID=$(id -g roboshop)
 
   PRINT "Update ${COMPONENT} configuration"
-  sed -i -e "/^uid/ c uid = ${USER_ID}" -e "/^gid/ c gid = ${GROUP_ID}" /home/roboshop/${COMPONENT}/${COMPONENT}.ini
+  sed -i -e "/^uid/ c uid = ${USER_ID}" -e "/^gid/ c gid = ${GROUP_ID}" /home/roboshop/${COMPONENT}/${COMPONENT}.ini &>>${LOG}
   CHECK_STAT $?
 
   SYSTEMD 
