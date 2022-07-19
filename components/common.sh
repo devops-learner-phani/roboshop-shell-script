@@ -25,20 +25,6 @@ PRINT() {
   echo "$1"
 }
 
-SYSTEMD() {
-  PRINT "Update system congifuration"
-    sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' -e 's/CARTENDPOINT/cart.roboshop.internal/' -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG}
-    CHECK_STAT $?
-
-    PRINT "Setup system configuration"
-    mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>>${LOG} && systemctl daemon-reload &>>${LOG}
-    CHECK_STAT $?
-
-
-    PRINT "restart ${COMPONENT} service"
-    systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
-    CHECK_STAT $?
-}
 
 APP_COMMON_SETUP() {
 
@@ -61,6 +47,21 @@ APP_COMMON_SETUP() {
     unzip /tmp/${COMPONENT}.zip &>>${LOG}  && mv ${COMPONENT}-main ${COMPONENT} && cd ${COMPONENT}
     CHECK_STAT $?
 
+}
+
+SYSTEMD() {
+    PRINT "Update system congifuration"
+    sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' -e 's/CARTENDPOINT/cart.roboshop.internal/' -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG}
+    CHECK_STAT $?
+
+    PRINT "Setup system configuration"
+    mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>>${LOG} && systemctl daemon-reload &>>${LOG}
+    CHECK_STAT $?
+
+
+    PRINT "restart ${COMPONENT} service"
+    systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
+    CHECK_STAT $?
 }
 
 NODEJS() {
@@ -129,6 +130,7 @@ NGINX() {
 }
 
 MAVEN() {
+
   CHECK_ROOT
   
   PRINT "Install maven "
@@ -138,8 +140,8 @@ MAVEN() {
   APP_COMMON_SETUP
 
 
-  PRINT "Organise ${COMPONENT} content"
-  mv ${COMPONENT}-main ${COMPONENT} &>>${LOG} && cd ${COMPONENT} &>>${LOG}
+  PRINT "organise ${COMPONENT} content"
+  mv ${COMPONENT}-main ${COMPONENT}  && cd ${COMPONENT} &>>${LOG}
   CHECK_STAT $?
 
   PRINT "Downloading ${COMPONENT}  dependencies"
