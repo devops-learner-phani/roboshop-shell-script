@@ -42,11 +42,11 @@ SYSTEMD() {
 
 APP_COMMON_SETUP() {
 
-   PRINT "Creating application user"
-    id roboshop &>>${LOG}
-    if [ $? -ne 0 ]; then
+    PRINT "Creating application user"
+     id roboshop &>>${LOG}
+     if [ $? -ne 0 ]; then
       useradd roboshop &>>${LOG}
-    fi
+     fi
     CHECK_STAT $?
 
     PRINT "Downloading ${COMPONENT} content"
