@@ -18,7 +18,7 @@ fi
 }
 
 LOG=/tmp/roboshop.log
-rm -r $LOG
+rm -r ${LOG}
 
 PRINT() {
   echo "------ $1 ------" >>${LOG}
