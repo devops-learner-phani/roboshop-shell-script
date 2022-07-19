@@ -123,7 +123,6 @@ NGINX() {
 }
 
 MAVEN() {
-
   CHECK_ROOT
   
   PRINT "Install maven "
@@ -134,6 +133,7 @@ MAVEN() {
   id roboshop &>>${LOG}
   if [ $? -ne 0 ]; then
     useradd roboshop &>>${LOG}
+  fi
   CHECK_STAT $?
 
   PRINT "Downloading shipping content"
@@ -170,4 +170,5 @@ MAVEN() {
   PRINT "restart ${COMPONENT} service"
   systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
   CHECK_STAT $?
+}
 }
