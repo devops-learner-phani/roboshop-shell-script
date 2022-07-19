@@ -47,6 +47,10 @@ APP_COMMON_SETUP() {
     unzip /tmp/${COMPONENT}.zip &>>${LOG}  && mv ${COMPONENT}-main ${COMPONENT} && cd ${COMPONENT}
     CHECK_STAT $?
 
+    PRINT "organise ${COMPONENT} content"
+      mv ${COMPONENT}-main ${COMPONENT}  && cd ${COMPONENT} &>>${LOG}
+      CHECK_STAT $?
+
 }
 
 SYSTEMD() {
@@ -139,10 +143,6 @@ MAVEN() {
 
   APP_COMMON_SETUP
 
-
-  PRINT "organise ${COMPONENT} content"
-  mv ${COMPONENT}-main ${COMPONENT}  && cd ${COMPONENT} &>>${LOG}
-  CHECK_STAT $?
 
   PRINT "Downloading ${COMPONENT}  dependencies"
   mvn clean package &>>${LOG} && mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar &>>${LOG}
