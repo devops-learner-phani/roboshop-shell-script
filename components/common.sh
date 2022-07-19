@@ -131,7 +131,9 @@ MAVEN() {
   CHECK_STAT $?
 
   PRINT "Adding application user"
-  useradd roboshop &>>${LOG}
+  id roboshop &>>${LOG}
+  if [ $? -ne 0 ]; then
+    useradd roboshop &>>${LOG}
   CHECK_STAT $?
 
   PRINT "Downloading shipping content"
