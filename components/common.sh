@@ -121,9 +121,11 @@ NGINX() {
   mv ${COMPONENT}-main/localhost.conf /etc/nginx/default.d/roboshop.conf &>>${LOG}
   CHECK_STAT $?
 
-  PRINT "Update ${COMPONENT} configuration"
+  for backend in catalogue user cart shipping payment ; do
+  PRINT "Update $backend configuration"
   sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal/' -e '/user/ s/localhost/user.roboshop.internal/' -e '/cart/ s/localhost/cart.roboshop.internal/' -e '/shipping/ s/localhost/shipping.roboshop.internal/' -e '/payment/ s/localhost/payment.roboshop.internal/' /etc/nginx/default.d/roboshop.conf
   CHECK_STAT $?
+  done
 
   PRINT "Restart nginx service"
   systemctl enable nginx &>>${LOG} && systemctl restart nginx &>>${LOG}
