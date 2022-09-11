@@ -1,5 +1,18 @@
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash
-yum install nodejs -y
+source components/common.sh
+
+CHECK_ROOT
+
+echo "configure yum repos"
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG}
+CHECK_STAT $?
+
+echo "Install nodejs"
+yum install nodejs -y &>>${LOG}
+CHECK_STAT $?
+
+
+exit
+
 useradd roboshop
 curl -s -L -o /tmp/cart.zip "https://github.com/roboshop-devops-project/cart/archive/main.zip"
 cd /home/roboshop
