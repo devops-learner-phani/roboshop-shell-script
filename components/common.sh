@@ -47,7 +47,7 @@ APP_COMMON_SETUP() {
 SYSTEMD() {
 
   PRINT "Update systemd configuration"
-  sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' /home/roboshop/${COMPONENT}.zip/systemd.service &>>${LOG}
+  sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' -e 's/CARTENDPOINT/cart.roboshop.internal/' -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${COMPONENT}.zip/systemd.service &>>${LOG}
   CHECK_STAT $?
 
   PRINT "Organise content"
@@ -111,5 +111,23 @@ NGINX() {
   PRINT "START nginx service"
   systemctl enable nginx &>>${LOG} &&  systemctl restart nginx &>>${LOG}
   CHECK_STAT $?
+
+}
+
+MAVEN() {
+
+  CHECK_ROOT
+
+  PRINT "Install MAVEN"
+  yum install maven -y &>>${LOG}
+  CHECK_STAT $?
+
+  APP_COMMON_SETUP
+
+  PRINT "Install Maven Dependencies"
+  mvn clean package &>>${LOG} && mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar &>>${LOG}
+  CHECK_STAT $?
+
+  SYSTEMD
 
 }
