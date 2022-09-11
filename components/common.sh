@@ -13,6 +13,7 @@ CHECK_STAT() {
 echo "----------------------"  >>${LOG}
 if [ $? -ne 0 ]; then
   echo -e "\e[31m FAILED \e[0m"
+  echo -e "\n check log file - ${LOG} for errors\n"
   exit 2
 else
   echo -e "\e[32m SUCCESS \e[0m"
