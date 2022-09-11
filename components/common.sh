@@ -13,6 +13,7 @@ CHECK_STAT() {
   echo "----------------------"  >>${LOG}
   if [ $? -ne 0 ]; then
     echo -e "\e[31m FAILED \e[0m"
+    exit 2
   else
     echo -e "\e[32m SUCCESS \e[0m"
   fi
@@ -80,5 +81,35 @@ NODEJS() {
   CHECK_STAT $?
 
   SYSTEMD
+
+}
+
+NGINX() {
+
+  CHECK_ROOT
+
+  PRINT "Install NGINX"
+  yum install nginx -y &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Download ${COMPONENT} content"
+  curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip" &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Remove old content"
+  cd /usr/share/nginx/html && rm -rf * &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Extract ${COMPONENT} content"
+  unzip /tmp/${COMPONENT}.zip &>>${LOG} && mv ${COMPONENT}-main/static/* .  &>>${LOG} && mv ${COMPONENT}-main/localhost.conf /etc/nginx/default.d/roboshop.conf  &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Update systemd config"
+  sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal/' -e '/user/ s/localhost/user.roboshop.internal/' -e '/cart/ s/localhost/cart.roboshop.internal/' -e '/shipping/ s/localhost/shipping.roboshop.internal/' -e '/payment/ s/localhost/payment.roboshop.internal/' /etc/nginx/default.d/roboshop.conf &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "START nginx service"
+  systemctl enable nginx &>>${LOG} &&  systemctl restart nginx &>>${LOG}
+  CHECK_STAT $?
 
 }
