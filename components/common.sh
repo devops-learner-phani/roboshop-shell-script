@@ -105,7 +105,7 @@ NGINX() {
   CHECK_STAT $?
 
   PRINT "Update systemd config"
-  sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal/' -e '/user/ s/localhost/user.roboshop.internal/' -e '/cart/ s/localhost/cart.roboshop.internal/' -e '/shipping/ s/localhost/shipping.roboshop.internal/' -e '/payment/ s/localhost/payment.roboshop.internal/' /etc/nginx/default.d/roboshop.conf &>>${LOG}
+  sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal/' -e '/user/ s/localhost/user.roboshop.internal/' -e '/cart/ s/localhost/cart.roboshop.internal/' -e '/shipping/ s/localhost/shipping.roboshop.internal/' -e '/payment/ s/localhost/payment.roboshop.internal/' -e 's/RABBITMQ-IP/rabbitmq.roboshop.internal/' /etc/nginx/default.d/roboshop.conf &>>${LOG}
   CHECK_STAT $?
 
   PRINT "START nginx service"
@@ -152,6 +152,38 @@ PYTHON() {
 
   PRINT "Update uid and gid "
   sed -i -e "/^uid/ c uid = ${USER_ID}" -e "/^gid/ c uid = ${GROUP_ID}" /home/roboshop/${COMPONENT}/${COMPONENT}.ini  &>>${LOG}
+  CHECK_STAT $?
+
+  SYSTEMD
+
+}
+
+GOLANG() {
+
+  CHECK_ROOT
+
+  PRINT "Install GOLANG"
+  yum install golang -y &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "add application user"
+  useradd roboshop &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Download ${COMPONENT} content"
+  curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/refs/heads/main.zip" &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Remove old content"
+  cd /home/roboshop && rm -rf ${COMPONENT} &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Extract ${COMPONENT} content"
+  unzip /tmp/${COMPONENT}.zip  &>>${LOG}  && mv ${COMPONENT}-main ${COMPONENT} && cd /home/roboshop/${COMPONENT}
+  CHECK_STAT $?
+
+  PRINT "Install golang dependencies"
+  go mod init dispatch &>>${LOG} && go get &>>${LOG} && go build &>>${LOG}
   CHECK_STAT $?
 
   SYSTEMD
