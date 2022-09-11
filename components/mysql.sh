@@ -16,10 +16,10 @@ yum install mysql-community-server -y &>>${LOG}
 CHECK_STAT $?
 
 PRINT "Start the mysql service"
-systemctl enable mysqld &>>${LOG} && systemctl restart mysqld &>>${LOG}
+systemctl start mysqld &>>${LOG} && systemctl enable mysqld &>>${LOG}
 CHECK_STAT $?
 
-MYSQL_DEFAULT_PASSWORD=$( grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}') &>>${LOG}
+MYSQL_DEFAULT_PASSWORD=$( grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}')
 
 echo show databases | mysql -uroot -p"${MYSQL_PASSWORD}" &>>${LOG}
 if [ $? -ne 0 ]; then
@@ -28,8 +28,8 @@ if [ $? -ne 0 ]; then
   CHECK_STAT $?
 fi
 
-echo show plugins | mysql -uroot -pRoboShop@1 2>>${LOG} | grep validate_password &>>${LOG}
-if [ $? -ne 0 ]; then
+echo show plugins | mysql -uroot -p"${MYSQL_PASSWORD}" 2>>${LOG} | grep validate_password &>>${LOG}
+if [ $? -eq 0 ]; then
   PRINT "uninstall Validate password plugin"
   echo "uninstall plugin validate_password;" | mysql -uroot -p"${MYSQL_PASSWORD}" &>>${LOG}
   CHECK_STAT $?
