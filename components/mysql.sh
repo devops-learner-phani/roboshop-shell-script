@@ -2,10 +2,10 @@ source components/common.sh
 
 CHECK_ROOT
 
-#if [ -z "${MYSQL_PASSWORD}" ]; then
-#  echo "Needed MYSQL_PASSWORD variable"
-#  exit 1
-#fi
+if [ -z "${MYSQL_PASSWORD}" ]; then
+  echo "Needed MYSQL_PASSWORD variable"
+  exit 1
+fi
 
 PRINT "Configure yum repos"
 curl -s -L -o /etc/yum.repos.d/mysql.repo https://raw.githubusercontent.com/roboshop-devops-project/mysql/main/mysql.repo &>>${LOG}
@@ -19,7 +19,7 @@ PRINT "Start the mysql service"
 systemctl enable mysqld &>>${LOG} && systemctl restart mysqld &>>${LOG}
 CHECK_STAT $?
 
-#MYSQL_DEFAULT_PASSWORD=$( grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}') &>>${LOG}
+MYSQL_DEFAULT_PASSWORD=$( grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}') &>>${LOG}
 #
 #echo show databases | mysql -uroot -p"${MYSQL_PASSWORD}" &>>${LOG}
 #if [ $? -ne 0 ]; then
