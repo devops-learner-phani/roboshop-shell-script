@@ -38,7 +38,7 @@ APP_COMMON_SETUP() {
   CHECK_STAT $?
 
   PRINT "Extract ${COMPONENT} content"
-  unzip /tmp/${COMPONENT}.zip  &>>${LOG}  && mv ${COMPONENT}.zip-main ${COMPONENT}.zip && cd /home/roboshop/${COMPONENT}.zip
+  unzip /tmp/${COMPONENT}.zip  &>>${LOG}  && mv ${COMPONENT}-main ${COMPONENT}.zip && cd /home/roboshop/${COMPONENT}.zip
   CHECK_STAT $?
 
 }
