@@ -2,11 +2,11 @@ source components/common.sh
 
 CHECK_ROOT
 
-echo "configure yum repos"
+PRINT "configure yum repos"
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG}
 CHECK_STAT $?
 
-echo "Install nodejs"
+PRINT "Install nodejs"
 yum install nodejs -y &>>${LOG}
 CHECK_STAT $?
 
