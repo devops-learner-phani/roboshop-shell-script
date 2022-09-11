@@ -10,13 +10,13 @@ LOG=/tmp/roboshop.log
 rm -f $LOG
 
 CHECK_STAT() {
-  echo "----------------------"  >>${LOG}
-  if [ $? -ne 0 ]; then
-    echo -e "\e[31m FAILED \e[0m"
-    exit 2
-  else
-    echo -e "\e[32m SUCCESS \e[0m"
-  fi
+echo "----------------------"  >>${LOG}
+if [ $? -ne 0 ]; then
+  echo -e "\e[31m FAILED \e[0m"
+  exit 2
+else
+  echo -e "\e[32m SUCCESS \e[0m"
+fi
 }
 
 PRINT() {
