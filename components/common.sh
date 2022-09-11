@@ -73,7 +73,7 @@ NODEJS() {
   yum install nodejs -y &>>${LOG}
   CHECK_STAT $?
 
-   APP_COMMON_SETUP
+  APP_COMMON_SETUP
 
   PRINT "Install Nodejs dependencies"
   npm install  &>>${LOG}
